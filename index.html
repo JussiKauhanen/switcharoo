@@ -1,14 +1,95 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>HTML 5 Boilerplate</title>
-    <link rel="stylesheet" href="style.css">
-  </head>
-  <body>
-    <h1>Hello World!</h1>
-    <script src="index.js"></script>
-  </body>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Switcharoo</title>
+  <meta name="description" content="Move passwords, notes and small files between devices with QR codes. Nothing leaves your devices.">
+  <meta name="theme-color" content="#eaf3ff">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='9' fill='%233b82f6'/%3E%3Cpath d='M9 12h13l-4-4M23 20H10l4 4' fill='none' stroke='white' stroke-width='2.6' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E">
+  <link rel="stylesheet" href="css/style.css">
+  <script src="vendor/qrcode.js" defer></script>
+  <script type="module" src="js/app.js"></script>
+</head>
+<body>
+  <div class="bg" aria-hidden="true"><i></i><i></i><i></i><i></i></div>
+
+  <header class="top">
+    <div class="brand">
+      <svg viewBox="0 0 32 32" aria-hidden="true"><rect width="32" height="32" rx="9"/><path d="M9 12h13l-4-4M23 20H10l4 4"/></svg>
+      switcharoo
+    </div>
+    <nav class="tabs" role="tablist">
+      <button role="tab" data-tab="send" aria-selected="true">Send</button>
+      <button role="tab" data-tab="receive" aria-selected="false">Receive</button>
+    </nav>
+  </header>
+
+  <main>
+    <!-- Send -->
+    <section class="card" id="send">
+      <div class="tile" id="drop" tabindex="0" role="button" aria-label="Choose a file to send">
+        <div class="idle">
+          <div class="chip">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 3h8l4 4v14H6z"/><path d="M14 3v4h4"/></svg>
+            <span>FILE</span>
+          </div>
+          <p>Click or drop a file</p>
+        </div>
+        <canvas id="qr" hidden></canvas>
+        <input type="file" id="file" hidden>
+      </div>
+
+      <div class="side">
+        <div id="compose">
+          <h1>Send text or a file</h1>
+          <textarea id="text" rows="4" placeholder="Type or paste a password, a note…" spellcheck="false" autocomplete="off" autocapitalize="off"></textarea>
+          <div class="row">
+            <button class="btn ghost" id="paste">Paste &amp; send</button>
+            <button class="btn primary" id="go">Show QR</button>
+          </div>
+        </div>
+
+        <div id="showing" hidden>
+          <h1 id="out-title"></h1>
+          <p class="muted" id="out-meta"></p>
+          <div class="row" id="rotate" hidden>
+            <span class="pill" id="out-frame"></span>
+            <button class="btn ghost small" id="speed" title="Rotation speed"></button>
+          </div>
+          <p class="muted small" id="out-hint"></p>
+          <button class="btn ghost" id="done">Done</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- Receive -->
+    <section class="card" id="receive" hidden>
+      <div class="tile cam">
+        <video id="video" playsinline muted autoplay></video>
+        <div class="finder" aria-hidden="true"></div>
+        <div class="progress" hidden><i id="bar"></i></div>
+        <button class="btn primary" id="cam-start" hidden>Start camera</button>
+      </div>
+
+      <div class="side">
+        <h1>Scan a code</h1>
+        <p class="muted" id="rx-status">Point the camera at the QR on the other device.</p>
+        <button class="btn ghost" id="cam-switch" hidden>Switch camera</button>
+      </div>
+    </section>
+
+    <!-- History -->
+    <section class="history">
+      <div class="history-head">
+        <h2>History</h2>
+        <button class="link" id="clear" hidden>Clear all</button>
+      </div>
+      <ul id="list"></ul>
+      <p class="empty" id="empty">Sent and received items show up here.</p>
+    </section>
+  </main>
+
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+</body>
 </html>
