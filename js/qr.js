@@ -1,8 +1,9 @@
 // QR rendering (vendor/qrcode.js exposes a global `qrcode`).
 
-export function drawQR(canvas, text, ecc = 'M') {
+// mode: 'Alphanumeric' for transfer frames, 'Byte' for anything else (URLs).
+export function drawQR(canvas, text, ecc = 'M', mode = 'Alphanumeric') {
   const q = qrcode(0, ecc);
-  q.addData(text, 'Alphanumeric');
+  q.addData(text, mode);
   q.make();
 
   const n = q.getModuleCount();

@@ -7,6 +7,8 @@ No server, no account, nothing leaves the two devices. It's a static page that r
 - **Receive**: point the camera at the other screen. The bar fills and the item lands in history.
 - **History**: each item has copy (paste it anywhere), download, show-as-QR again, and delete. Text is masked until you tap it.
 - Data is deflate-compressed before sending (native `CompressionStream`) and decompressed on receive.
+- **Landing page** (`index.html`): a QR code and link to the app. Open it on your laptop, scan with your phone, and the app opens there.
+- **Dark mode** follows the system. The moon/sun button overrides it, and the choice is remembered.
 
 ## Run locally
 
@@ -14,7 +16,8 @@ The camera needs a secure context, which `localhost` counts as:
 
 ```sh
 python3 -m http.server 8000
-# open http://localhost:8000
+# open http://localhost:8000          landing page
+# open http://localhost:8000/app.html the app itself
 ```
 
 To test with a phone, use the GitHub Pages URL (HTTPS). A plain LAN IP won't get camera access.
@@ -23,15 +26,18 @@ To test with a phone, use the GitHub Pages URL (HTTPS). A plain LAN IP won't get
 
 1. Push this folder to a GitHub repo.
 2. Go to **Settings → Pages → Build and deployment**, choose *Deploy from a branch*, then `main` and `/ (root)`.
-3. Open `https://<user>.github.io/<repo>/`.
+3. Open `https://jussikauhanen.github.io/switcharoo/`. The landing page's QR points to `…/<repo>/app.html`.
 
 No build step. All paths are relative, so it works from a sub-path.
 
 ## Structure
 
 ```
-index.html        markup
-css/style.css     all styles (desktop + mobile)
+index.html        landing page: QR + link that opens the app on another device
+app.html          the app
+css/style.css     all styles (light/dark tokens, desktop + mobile)
+js/theme.js       light/dark toggle, loaded in <head> on both pages
+js/landing.js     draws the landing QR from the current URL
 js/app.js         UI wiring: tabs, send, receive, history list
 js/codec.js       compress, base45, split into frames, reassemble
 js/qr.js          draw a QR to canvas, rotate through frames
